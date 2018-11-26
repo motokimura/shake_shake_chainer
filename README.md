@@ -1,4 +1,4 @@
 # Shake-Shake Regularization
-Implementation of Shake-Shake Regularization with Chainer
+A Chainer implementation of [Shake-Shake regularization](https://arxiv.org/abs/1705.07485).
 
 *This README is under the construction...*
