@@ -1,2 +1,4 @@
-# shake_shake_chainer
-Implementatio of Shake-Shake regularization with Chainer
+# Shake-Shake Regularization
+Implementation of Shake-Shake Regularization with Chainer
+
+*This README is under the construction...*
