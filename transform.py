@@ -11,7 +11,7 @@ def transform(inputs, mean, std, crop_size=(32, 32), pad=4, train=True):
 
     if train:
         # Random crop
-        img = np.pad(img, pad_width=pad, mode='constant')
+        img = np.pad(img, pad_width=((0, 0), (pad, pad), (pad, pad)), mode='constant')
         img = transforms.random_crop(img, tuple(crop_size))
 
         # Random flip
