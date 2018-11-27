@@ -70,15 +70,15 @@ Then, open `http://localhost:6006` from your browser.
 
 ### Papers
 
-* Gastaldi, Xavier. "Shake-Shake regularization." (arXiv)[https://arxiv.org/abs/1705.07485]
-* Gastaldi, Xavier. "Shake-Shake regularization of 3-branch residual networks." (ICLR2017 Workshop)[https://openreview.net/forum?id=HkO-PCmYl]
+* Gastaldi, Xavier. "Shake-Shake regularization." [[arXiv]](https://arxiv.org/abs/1705.07485)
+* Gastaldi, Xavier. "Shake-Shake regularization of 3-branch residual networks." [[ICLR2017 Workshop]](https://openreview.net/forum?id=HkO-PCmYl)
 
 ### Other implementations
 
-* nutszebra's Chainer implementation. (GitHub)[https://github.com/nutszebra/shake_shake]
-* akitotakeki's Chainer implementation. (Gist)[https://gist.github.com/akitotakeki/c82a3bb38c930cd295628cfa1e29fdd7]
-* owruby's Pytorch implementation. (GitHub)[https://github.com/owruby/shake-shake_pytorch]
-* Author's Lua implementation. (GitHub)[https://github.com/xgastaldi/shake-shake]
+* nutszebra's Chainer implementation. [[GitHub]](https://github.com/nutszebra/shake_shake)
+* akitotakeki's Chainer implementation. [[Gist]](https://gist.github.com/akitotakeki/c82a3bb38c930cd295628cfa1e29fdd7)
+* owruby's Pytorch implementation. [[GitHub]](https://github.com/owruby/shake-shake_pytorch)
+* Author's Lua implementation. [[GitHub]](https://github.com/xgastaldi/shake-shake)
 
 ## License
 
