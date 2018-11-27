@@ -70,8 +70,7 @@ class ShakeBlockA(chainer.link.Chain):
         h2 = self.branch2(x)
 
         x0 = F.relu(x)
-        x1 = x0
-        x1 = self.conv1(F.average_pooling_2d(x1, ksize=1, stride=self._stride, pad=0))
+        x1 = self.conv1(F.average_pooling_2d(x0, ksize=1, stride=self._stride, pad=0))
         x2 = self._zero_pads(self._zero_pads(x0, pad=1, axis=2), pad=1, axis=3)
         x2 = self.conv2(F.average_pooling_2d(x2, ksize=1, stride=self._stride, pad=0)[:, :, 1:, 1:])
         h0 = F.concat((x1, x2), axis=1)
