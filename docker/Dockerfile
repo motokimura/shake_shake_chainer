@@ -39,7 +39,7 @@ RUN curl -o ~/miniconda.sh -O https://repo.continuum.io/miniconda/Miniconda3-lat
 ENV PATH /opt/conda/envs/py$PYTHON_VERSION/bin:$PATH
 
 # Install chainer under conda environment
-RUN pip install cupy==4.0.0b3 chainer==4.0.0b3
+RUN pip install cupy==4.0.0b3 chainer==4.0.0b3 chainercv==0.8.0
 
 # Clone chainer repository
 RUN git clone https://github.com/chainer/chainer.git /opt/chainer

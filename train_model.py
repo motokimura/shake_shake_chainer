@@ -2,24 +2,25 @@
 # -*- coding: utf-8 -*-
 
 ## TODO
-## * CIFAR10 data augmentation
 ## * Learning rate scheduling with cosine annealing
 
 from __future__ import print_function
 import argparse
 import os
+from functools import partial
+import numpy as np
 
 import chainer
 import chainer.links as L
 from chainer import training
 from chainer.training import triggers, extensions
-from chainer.datasets import get_cifar10
-#from chainer.datasets import get_cifar100 # not supported for now..
+from chainer.datasets import cifar, TransformDataset
 
 from tensorboardX import SummaryWriter
 from tboard_logger import TensorboardLogger
 
 from shake_shake import ShakeShake
+from transform import transform
 
 
 def main():
@@ -54,14 +55,28 @@ def main():
 	if args.dataset == 'cifar10':
 		print('Using CIFAR10 dataset.')
 		class_labels = 10
-		train, test = get_cifar10()
+		train, test = cifar.get_cifar10(scale=255.)
 	elif args.dataset == 'cifar100':
-		raise RuntimeError('Sorry, shake-shake for CIFAR100 is not yet ready..')
+		raise RuntimeError('Sorry, model for CIFAR100 is not yet implemented..')
 		#print('Using CIFAR100 dataset.')
 		#class_labels = 100
-		#train, test = get_cifar100()
+		#train, test = cifar.get_cifar100(scale=255.)
 	else:
 		raise RuntimeError('Invalid dataset choice.')
+	
+	# Data preprocessing
+	mean = np.mean([x for x, _ in train], axis=(0, 2, 3))
+	std = np.std([x for x, _ in train], axis=(0, 2, 3))
+
+	train_transfrom = partial(transform, mean=mean, std=std, train=True)
+	test_transfrom = partial(transform, mean=mean, std=std, train=False)
+
+	train = TransformDataset(train, train_transfrom)
+	test = TransformDataset(test, test_transfrom)
+	
+	print('Finised data preparation. Starting model training...')
+	print()
+
 	model = L.Classifier(ShakeShake(class_labels))
 	if args.gpu >= 0:
 		# Make a specified GPU current
