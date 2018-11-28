@@ -105,7 +105,7 @@ def main():
 	trainer.extend(extensions.Evaluator(test_iter, model, device=args.gpu))
 
 	# Decrease learning rate with cosine annealing
-	trainer.extend(LrSceduler_CosineAnneal(args.lr, args.epochs))
+	trainer.extend(LrSceduler_CosineAnneal(args.lr, args.epoch))
 
 	# Dump a computational graph from 'loss' variable at the first iteration
 	# The "main" refers to the target link of the "main" optimizer.
