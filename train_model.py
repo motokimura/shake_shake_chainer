@@ -21,6 +21,7 @@ from tboard_logger import TensorboardLogger
 
 from shake_shake import ShakeShake
 from transform import transform
+from lr_scheduler import LrSceduler_CosineAnneal
 
 
 def main():
@@ -31,14 +32,18 @@ def main():
 						help='Number of images in each mini-batch')
 	parser.add_argument('--lr', '-l', type=float, default=0.1,
 						help='Learning rate for SGD')
-	parser.add_argument('--epoch', '-e', type=int, default=300,
+	parser.add_argument('--epoch', '-e', type=int, default=1800,
 						help='Number of sweeps over the dataset to train')
+	parser.add_argument('--base_width', '-w', type=int, default=64,
+						help='Base width parameter for Shake-Shake model')
 	parser.add_argument('--gpu', '-g', type=int, default=0,
 						help='GPU ID (negative value indicates CPU)')
 	parser.add_argument('--out', '-o', default='run_0',
 						help='Directory to output the result')
 	parser.add_argument('--resume', '-r', default='',
 						help='Resume the training from snapshot')
+	parser.add_argument('--nobar', dest='bar', action='store_false',
+						help='Disable ProgressBar extension')
 	args = parser.parse_args()
 
 	print('GPU: {}'.format(args.gpu))
@@ -77,7 +82,7 @@ def main():
 	print('Finised data preparation. Starting model training...')
 	print()
 
-	model = L.Classifier(ShakeShake(class_labels))
+	model = L.Classifier(ShakeShake(class_labels, base_width=args.base_width))
 	if args.gpu >= 0:
 		# Make a specified GPU current
 		chainer.backends.cuda.get_device_from_id(args.gpu).use()
@@ -99,9 +104,8 @@ def main():
 	# Evaluate the model with the test dataset for each epoch
 	trainer.extend(extensions.Evaluator(test_iter, model, device=args.gpu))
 
-	# Reduce the learning rate by half every 25 epochs.
-	#trainer.extend(extensions.ExponentialShift('lr', 0.5),
-	#			   trigger=(25, 'epoch'))
+	# Decrease learning rate with cosine annealing
+	trainer.extend(LrSceduler_CosineAnneal(args.lr, args.epochs))
 
 	# Dump a computational graph from 'loss' variable at the first iteration
 	# The "main" refers to the target link of the "main" optimizer.
@@ -142,9 +146,10 @@ def main():
 	trainer.extend(extensions.PrintReport(
 		['epoch', 'main/loss', 'validation/main/loss',
 		 'main/accuracy', 'validation/main/accuracy', 'lr', 'elapsed_time']))
-
-	# Print a progress bar to stdout
-	trainer.extend(extensions.ProgressBar())
+	
+	if args.bar:
+		# Print a progress bar to stdout
+		trainer.extend(extensions.ProgressBar())
 
 	# Write training log to TensorBoard log file
 	trainer.extend(TensorboardLogger(writer,
