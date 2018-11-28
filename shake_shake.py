@@ -132,7 +132,7 @@ class RCBRCB(chainer.link.Chain):
 
 class ShakeShake(chainer.Chain):
 
-    def __init__(self, n_out=10, n_layer=26, base_width=32):
+    def __init__(self, n_out=10, n_layer=26, base_width=64):
         super().__init__()
         kwargs = {'initialW': normal.HeNormal(scale=1.0)}
 
@@ -163,10 +163,10 @@ class ShakeShake(chainer.Chain):
     def __call__(self, x):
         h = x # [b, 3, 32, 32]
         h = self.bn1(self.conv1(h)) # [b, 16, 32, 32]
-        h = self.res2(h) # [b, 32, 32, 32]
-        h = self.res3(h) # [b, 64, 16, 16]
-        h = self.res4(h) # [b, 128, 8, 8]
+        h = self.res2(h) # [b, k, 32, 32]
+        h = self.res3(h) # [b, 2*k, 16, 16]
+        h = self.res4(h) # [b, 4*k, 8, 8]
         B, _, H, W = h.data.shape
-        h = F.average_pooling_2d(F.relu(h), ksize=(H, W)).reshape(B, -1) # [b, 128]
+        h = F.average_pooling_2d(F.relu(h), ksize=(H, W)).reshape(B, -1) # [b, 4*k]
         h = self.fc5(h) # [b, n_out]
         return h
