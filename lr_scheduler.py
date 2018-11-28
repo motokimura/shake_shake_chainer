@@ -17,7 +17,7 @@ class LrSceduler_CosineAnneal(extension.Extension):
 
     def __call__(self, trainer):
 
-        e = trainer.observation['epoch']
+        e = trainer.updater.epoch
         lr = 0.5 * self._base_lr * (math.cos(math.pi * e / self._epochs) + 1.)
 
         optimizer = trainer.updater.get_optimizer(self._optimizer_name)
