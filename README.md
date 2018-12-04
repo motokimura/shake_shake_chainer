@@ -5,13 +5,13 @@ A Chainer implementation of [Shake-Shake regularization](https://arxiv.org/abs/1
 
 ## Accuracy
 
-### CIFAR-10
+### CIFAR-10 (Shake-ResNet)
 
 *Comming soon...*
 
-### CIFAR-100
+### CIFAR-100 (Shake-ResNext)
 
-*Currently not supported.. Your contribution is more than welcome.*
+*Currently Shake-ResNeXt is under implementation.. Your contribution is more than welcome!*
 
 ## Dependency
 
@@ -30,14 +30,14 @@ $ git clone https://github.com/motokimura/shake_shake_chainer.git $PROJ_DIR
 
 ### 1. Build Docker image
 
-Build docker image to setup the environment train/test Shake-Shake. 
+Build docker image to setup the environment to train/test the model with Shake-Shake regularization. 
 
 ```
 $ cd $PROJ_DIR/docker
 $ bash build.sh
 ```
 
-### 2. Train Shake-Shake model with CIFAR-10
+### 2. Train Shake-ResNet model with CIFAR-10
 
 Run docker container by following:
 

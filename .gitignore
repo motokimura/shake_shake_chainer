@@ -5,3 +5,4 @@ __pycache__
 .vscode
 
 /results/*
+!/results/Shake-ResNet-26 2x64d (Shake-Shake-Image)

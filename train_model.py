@@ -1,9 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-## TODO
-## * Learning rate scheduling with cosine annealing
-
 from __future__ import print_function
 import argparse
 import os
@@ -19,7 +16,7 @@ from chainer.datasets import cifar, TransformDataset
 from tensorboardX import SummaryWriter
 from tboard_logger import TensorboardLogger
 
-from shake_shake import ShakeShake
+from shake_resnet import ShakeResNet
 from transform import transform
 from lr_scheduler import LrSceduler_CosineAnneal
 
@@ -62,14 +59,13 @@ def main():
 		class_labels = 10
 		train, test = cifar.get_cifar10(scale=255.)
 	elif args.dataset == 'cifar100':
-		raise RuntimeError('Sorry, model for CIFAR100 is not yet implemented..')
-		#print('Using CIFAR100 dataset.')
-		#class_labels = 100
-		#train, test = cifar.get_cifar100(scale=255.)
+		print('Using CIFAR100 dataset.')
+		class_labels = 100
+		train, test = cifar.get_cifar100(scale=255.)
 	else:
 		raise RuntimeError('Invalid dataset choice.')
 	
-	# Data preprocessing
+	# Data preprocess
 	mean = np.mean([x for x, _ in train], axis=(0, 2, 3))
 	std = np.std([x for x, _ in train], axis=(0, 2, 3))
 
@@ -79,10 +75,11 @@ def main():
 	train = TransformDataset(train, train_transfrom)
 	test = TransformDataset(test, test_transfrom)
 	
-	print('Finised data preparation. Starting model training...')
-	print()
+	print('Finised data preparation. Preparing for model training...')
 
-	model = L.Classifier(ShakeShake(class_labels, base_width=args.base_width))
+	# Model and optimizer configuration
+	model = L.Classifier(ShakeResNet(class_labels, base_width=args.base_width))
+
 	if args.gpu >= 0:
 		# Make a specified GPU current
 		chainer.backends.cuda.get_device_from_id(args.gpu).use()
@@ -92,11 +89,11 @@ def main():
 	optimizer.setup(model)
 	optimizer.add_hook(chainer.optimizer.WeightDecay(1e-4))
 
+	# Set up a trainer
 	train_iter = chainer.iterators.SerialIterator(train, args.batchsize)
 	test_iter = chainer.iterators.SerialIterator(test, args.batchsize,
 												 repeat=False, shuffle=False)
-
-	# Set up a trainer
+	
 	updater = training.updaters.StandardUpdater(
 		train_iter, optimizer, device=args.gpu)
 	trainer = training.Trainer(updater, (args.epoch, 'epoch'), out=log_dir)
@@ -112,8 +109,11 @@ def main():
 	trainer.extend(extensions.dump_graph('main/loss'))
 
 	# Take a snapshot at each epoch
-	trainer.extend(extensions.snapshot(
-		filename='snaphot_epoch_{.updater.epoch}'))
+	trainer.extend(extensions.snapshot(filename='training_chekpoint'))
+	
+	# Take a snapshot of the current best model
+	trigger_save_model = triggers.MaxValueTrigger('validation/main/accuracy')
+	trainer.extend(extensions.snapshot_object(model, filename='best_model'), trigger=trigger_save_model)
 
 	# Write a log of evaluation statistics for each epoch
 	trainer.extend(extensions.LogReport())
@@ -160,7 +160,10 @@ def main():
 	if args.resume:
 		# Resume from a snapshot
 		chainer.serializers.load_npz(args.resume, trainer)
-
+	
+	print("Finished preparation. Starting model training...")
+	print()
+	
 	# Run the training
 	trainer.run()
 
