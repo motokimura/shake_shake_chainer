@@ -15,7 +15,7 @@ A Chainer implementation of [Shake-Shake regularization](https://arxiv.org/abs/1
 
 ## Results on CIFAR-100 (Shake-ResNeXt)
 
-*Currently Shake-ResNeXt is not implemented.. Your contribution is more than welcome!*
+*Currently Shake-ResNeXt is implemented.. Your contribution is more than welcome!*
 
 ## Dependency
 
