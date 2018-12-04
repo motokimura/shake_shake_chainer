@@ -9,13 +9,8 @@ A Chainer implementation of [Shake-Shake regularization](https://arxiv.org/abs/1
 | Shake-ResNet-26 2x64d (S-S-I) | **2.85 (1 run)**                 | 2.98 (average of 3 runs) |
 | Shake-ResNet-26 2x96d (S-S-I) | Not tested yet                   | 2.86 (average of 5 runs) |
 
-### Accuracy
-![](contents/resnet_acc.png)
+![](contents/resnet_err.png)
 
-### Loss
-![](contents/resnet_loss.png)
-
-### Notes
 * The model Shake-ResNet-26 2x64d (S-S-I) is trained with batch size 128, and initial learning rate 0.1.
 
 ## Results on CIFAR-100 (Shake-ResNeXt)
