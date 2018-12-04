@@ -1,17 +1,26 @@
 # Shake-Shake Regularization
 A Chainer implementation of [Shake-Shake regularization](https://arxiv.org/abs/1705.07485).
 
-*This README is under construction...*
+## Results on CIFAR-10 (Shake-ResNet)
 
-## Accuracy
+| Model                         | Test Error (this implementation) | Test Error (in paper)    |
+|:------------------------------|:--------------------------------:|:------------------------:|
+| Shake-ResNet-26 2x32d (S-S-I) | Not tested yet                   | 3.55 (average of 3 runs) |
+| Shake-ResNet-26 2x64d (S-S-I) | **2.85 (1 run)**                 | 2.98 (average of 3 runs) |
+| Shake-ResNet-26 2x96d (S-S-I) | Not tested yet                   | 2.86 (average of 5 runs) |
 
-### CIFAR-10 (Shake-ResNet)
+### Accuracy
+![](contents/resnet_acc.png)
 
-*Comming soon...*
+### Loss
+![](contents/resnet_loss.png)
 
-### CIFAR-100 (Shake-ResNext)
+### Notes
+* The model Shake-ResNet-26 2x64d (S-S-I) is trained with batch size 128, and initial learning rate 0.1.
 
-*Currently Shake-ResNeXt is under implementation.. Your contribution is more than welcome!*
+## Results on CIFAR-100 (Shake-ResNeXt)
+
+*Currently Shake-ResNeXt is not implemented.. Your contribution is more than welcome!*
 
 ## Dependency
 
